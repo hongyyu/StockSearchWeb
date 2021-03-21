@@ -1,0 +1,8 @@
+.active {
+  color: white;
+  border-radius: 15px;
+}
+
+.nb:hover {
+    cursor: pointer;
+}

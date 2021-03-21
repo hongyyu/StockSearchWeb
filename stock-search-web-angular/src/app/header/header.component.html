@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-md bg-dark navbar-dark fixed-top">
+  <a class="navbar-brand" routerLink="/">Stock Search</a>
+
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+
+    <ul class="navbar-nav ml-auto">
+
+      <li class="nav-item border active" id="search-link" (click)="chageStyle('search-link')">
+        <a class="nav-link" routerLink="/">Search</a>
+      </li>
+      <li class="nav-item" id="watchlist-link" (click)="chageStyle('watchlist-link')">
+        <a class="nav-link" routerLink="/watchlist">Watchlist</a>
+      </li>
+      <li class="nav-item" id="portfolio-link" (click)="chageStyle('portfolio-link')">
+        <a class="nav-link" routerLink="/portfolio">Portfolio</a>
+      </li>
+
+    </ul>
+  </div>
+
+</nav>
+
+<!-- search area below -->
+<h1 class="search-title">STOCK SEARCH</h1>
+
+<div class="input-group mb-3">
+
+  <input #ticker type="text" class="form-control" placeholder="Enter stock name">
+
+  <div class="input-group-append">
+    <button class="btn btn-outline-secondary" type="button" id="search-btn" routerLink="/details" (click)="searchStock(ticker.value)">Search</button>
+  </div>
+
+</div>
+

@@ -1,0 +1,78 @@
+<div class="container" style="width: 80%; margin-bottom: 10%;">
+  <h1 style="margin-top: 8%; font-size: 3rem;">My Watchlist</h1>
+
+  <ngb-alert *ngIf="isEmpty; else allOther" [type]="'warning'" [dismissible]="false" style="text-align: center; margin-top: 5%;">
+    Currently you don't have any stock in your watchlist
+  </ngb-alert>
+
+  <ng-template #allOther>
+
+      <div *ngIf="isLoading; else restBlock" class="row">
+        <div class="mx-auto" style="margin-top: 30px;">
+          <mat-spinner diameter="50"></mat-spinner>
+        </div>
+      </div>
+
+      <ng-template #restBlock>
+        <div *ngFor="let data of companyData; let i = index" (click)="getDetails(data.ticker)" style="margin-top: 2%;">
+          <mat-card class="nb" style="margin-top: 20px;">
+            <div style="position: absolute; z-index: 2; right: 10px; top: 5px;">
+              <button (click)="removeFromWatchlist(data.ticker)" type="button" class="close" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <mat-card-title>
+              <div class="row" style="margin-top: 2%;">
+                <div class="col-6" style="text-align: left;">
+                  <span style="font-size: 1.5rem;">{{ data.ticker }}</span>
+                </div>
+
+                <div *ngIf="data.color == 'red'" class="col-6" style="text-align: right; color: red;">
+                  <span style="font-size: 1.5rem;">{{ data.lastPrice }}</span>
+                </div>
+
+                <div *ngIf="data.color == 'green'" class="col-6" style="text-align: right; color: green;">
+                  <span style="font-size: 1.5rem;">
+                    {{ data.lastPrice }}
+                  </span>
+                </div>
+
+              </div>
+            </mat-card-title>
+            <mat-card-content>
+              <div class="row" style="margin-top: 2%;">
+                <div class="col-6" style="text-align: left;">
+                  <span style="font-size: 1.1rem;">{{ data.fullName }}</span>
+                </div>
+
+                <div *ngIf="data.color == 'red'" class="col-6" style="text-align: right; color: red;">
+                  <span style="font-size: 1.1rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" fill="currentColor" class="bi bi-caret-down-fill"
+                      viewBox="0 0 16 16" style="padding-right: 10px;">
+                      <path
+                        d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                    </svg>
+                    {{ data.change }} ({{ data.changePercent }}%)
+                  </span>
+                </div>
+
+                <div *ngIf="data.color == 'green'" class="col-6" style="text-align: right; color: green;">
+                  <span style="font-size: 1.1rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" fill="currentColor" class="bi bi-caret-up-fill"
+                      viewBox="0 0 16 16" style="padding-right: 10px;">
+                      <path
+                        d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                    </svg>
+                    {{ data.change }} ({{ data.changePercent }}%)
+                  </span>
+                </div>
+
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+        </div>
+      </ng-template>
+  </ng-template>
+
+</div>

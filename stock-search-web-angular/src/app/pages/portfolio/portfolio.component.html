@@ -1,0 +1,134 @@
+<div class="container" style="width: 80%; margin-bottom: 10%;">
+  <h1 style="margin-top: 8%; font-size: 3rem;">My Portfolio</h1>
+
+  <ngb-alert *ngIf="isEmpty; else allOther" [type]="'warning'" [dismissible]="false"
+    style="text-align: center; margin-top: 5%;">
+    Currently you don't have any stock
+  </ngb-alert>
+  <ng-template #allOther>
+    <div *ngIf="isLoading; else restBlock" class="row">
+      <div class="mx-auto" style="margin-top: 30px;">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+    </div>
+
+    <ng-template #restBlock>
+        <div *ngFor="let data of myPortfolio" style="margin-top: 4%;">
+          <mat-card class="nb" style="margin-top: 20px; padding: 0px;">
+            <mat-card-header style="background: #12121212;">
+              <mat-card-title style="padding-top: 15px;">
+                <span style="font-size: 1.5rem;">{{ data.ticker }}</span>
+                <span class="text-muted" style="font-size: 1.2rem; margin-left: 10px;">{{ data.name }}</span>
+              </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+              <div class="row mx-auto" style="margin-top: 10px; font-size: 1.2rem;">
+                <div class="col-3" style="text-align: left; line-height: 1.3;">
+                  Quantity:
+                  <br>
+                  Avg. Cost / Share:
+                  <br>
+                  Total Cost:
+                </div>
+                <div class="col-3" style="text-align: right; line-height: 1.3;">
+                  {{ data.quantity }}
+                  <br>
+                  {{ data.avgPerShare }}
+                  <br>
+                  {{ data.total }}
+                </div>
+                <div class="col-3" style="text-align: left; line-height: 1.3;">
+                  Change:
+                  <br>
+                  Current Price:
+                  <br>
+                  Market Value:
+                </div>
+
+                <div *ngIf="data.color == 'red'" class="col-3" style="text-align: right; line-height: 1.3; color: red;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" fill="currentColor" class="bi bi-caret-down-fill"
+                    viewBox="0 0 16 16" style="padding-right: 10px;">
+                    <path
+                      d="M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z" />
+                  </svg>
+                  {{ data.change }}
+                  <br>
+                  {{ data.curPrice }}
+                  <br>
+                  {{ data.marketValue }}
+                </div>
+                <div *ngIf="data.color == 'green'" class="col-3" style="text-align: right; line-height: 1.3; color: green;">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="1.2em" height="1.2em" fill="currentColor" class="bi bi-caret-up-fill"
+                    viewBox="0 0 16 16" style="padding-right: 10px;">
+                    <path
+                      d="M7.247 4.86l-4.796 5.481c-.566.647-.106 1.659.753 1.659h9.592a1 1 0 0 0 .753-1.659l-4.796-5.48a1 1 0 0 0-1.506 0z" />
+                  </svg>
+                  {{ data.change }}
+                  <br>
+                  {{ data.curPrice }}
+                  <br>
+                  {{ data.marketValue }}
+                </div>
+
+              </div>
+            </mat-card-content>
+            <mat-card-footer class="mx-auto" style="background: #12121212; width: 100%;">
+              <div class="row" style="padding: 10px;">
+                <div class="ml-auto">
+                  <button (click)="open(buy_content)" class="btn btn-success" type="button" style="margin-right: 10px;">Buy</button>
+                  <ng-template #buy_content let-modal>
+                    <div class="modal-header" style="font-size: 1rem;">
+                      <h4 class="modal-title" id="modal-basic-title">{{ data.ticker }}</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" style="font-size: 1rem;">
+                      <p style="margin-left: 10px;">Current Price: {{ data.curPrice }}</p>
+                      <div class="form-group"
+                        style="margin-left: 10px; margin-top: 5px; display:flex; flex-direction: row; justify-content: left; align-items: left">
+                        <label for="quant" class="col-form-label">Quantity</label>
+                        <input #quantity (keyup)="onKey(quantity.value, data.curPrice)" type="number" class="form-control" id="quant" value="0" min=0
+                          style="margin-left: 10px; width: 50%;" />
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="font-size: 1rem;">
+                      <div class="mr-auto">Total: {{ totalValue }}</div>
+                      <button type="button" class="btn btn-success" (click)="clickBuyButton(quantity.value, data.ticker)"
+                        [disabled]="quantity.value === '0' || quantity.value === '' || getFloat(quantity.value) <= 0">Buy</button>
+                    </div>
+                  </ng-template>
+
+                  <button (click)="open(sell_content)" class="btn btn-danger" type="button" style="margin-right: 20px;">Sell</button>
+                  <ng-template #sell_content let-modal>
+                    <div class="modal-header" style="font-size: 1rem;">
+                      <h4 class="modal-title" id="modal-basic-title">{{ data.ticker }}</h4>
+                      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body" style="font-size: 1rem;">
+                      <p style="margin-left: 10px;">Current Price: {{ data.curPrice }}</p>
+                      <div class="form-group"
+                        style="margin-left: 10px; margin-top: 5px; display:flex; flex-direction: row; justify-content: left; align-items: left">
+                        <label for="quant" class="col-form-label">Quantity</label>
+                        <input #quantity (keyup)="onKey(quantity.value, data.curPrice)" type="number" class="form-control" id="quant" value="0" min=0
+                          style="margin-left: 10px; width: 50%;" />
+                      </div>
+                    </div>
+                    <div class="modal-footer" style="font-size: 1rem;">
+                      <div class="mr-auto">Total: {{ totalValue }}</div>
+                      <button type="button" class="btn btn-success" (click)="clickSellButton(quantity.value, data.ticker)"
+                        [disabled]="quantity.value === '0' || quantity.value === '' || getFloat(quantity.value) <= 0 || data.quantity - getFloat(quantity.value) < 0">Sell</button>
+                    </div>
+                  </ng-template>
+
+                </div>
+              </div>
+            </mat-card-footer>
+          </mat-card>
+        </div>
+    </ng-template>
+  </ng-template>
+
+</div>

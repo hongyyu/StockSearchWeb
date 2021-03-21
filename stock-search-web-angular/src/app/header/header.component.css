@@ -1,0 +1,28 @@
+.active {
+  color: white;
+  border-radius: 15px;
+}
+
+.input-group {
+  width: 20%;
+  margin: auto;
+  padding-top: 60px;
+}
+
+.form-control {
+  border-radius: 20px;
+}
+
+.btn {
+  border-top-right-radius: 20px;
+  border-bottom-right-radius: 20px;
+}
+
+.search-title {
+  width: 40%;
+  margin: auto;
+  padding-top: 200px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 60px;
+}
